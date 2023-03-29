@@ -7,6 +7,8 @@ Description: test script
 """
 from pathlib import Path
 
+import argparse
+import os
 import cv2
 import numpy as np
 import torch
@@ -40,8 +42,34 @@ def get_output(ckpt_path, model, gpu=True):
 if __name__ == "__main__":
     ckpt_path = './ckpt/Photographic-Style/epoch=138.ckpt'
     # ckpt_path = './ckpt/L0-smoothing/_ckpt_epoch_79.ckpt'
-    imgs_dir = './images'
-    out_dir = './results'
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', type=str, default='inputs', help='Input image or folder')
+    parser.add_argument('-o', '--output', type=str, default='results', help='Output folder')
+    parser.add_argument(
+        '-n',
+        '--model_name',
+        type=str,
+        default='Multiscale-Tone',
+        help=('Photographic-Style | L0-smoothing | Pencil | Multiscale-Tone'))
+    
+    args = parser.parse_args()
+    
+    if args.model_name == "Photographic-Style":
+        ckpt_path = "./ckpt/Photographic-Style/epoch=138.ckpt"
+    elif args.model_name == "L0-smoothing":
+        ckpt_path = "./ckpt/L0-smoothing/_ckpt_epoch_79.ckpt"
+    elif args.model_name == "Pencil":
+        ckpt_path = "./ckpt/Pencil/epoch=138.ckpt"
+    elif args.model_name == "Multiscale-Tone":
+        ckpt_path = "./ckpt/Multiscale-Tone/epoch=178.ckpt"
+    else:
+        ckpt_path = "./ckpt/Multiscale-Tone/epoch=178.ckpt"
+        
+    os.makedirs(args.output, exist_ok=True)
+    
+    imgs_dir = args.input
+    out_dir = args.output
     gpu = True
 
     if gpu:
