@@ -12,6 +12,9 @@ import numpy as np
 import torch
 from imutils import paths
 
+import sys
+sys.path.append("..") # Add parent directory to system path
+
 from core.trainers.filter_trainer import LitModel
 
 
